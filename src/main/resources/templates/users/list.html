@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html th:replace="~{layout/base :: layout('Users - Airtel Inventory', ~{::section})}">
+<head></head>
+<body>
+<section>
+    <div style="display: flex; justify-content: space-between; margin-bottom: 20px;">
+        <h2>User Management</h2>
+        <a href="/users/add" class="btn">+ Add User</a>
+    </div>
+    <div style="background:white; border-radius:8px; overflow:auto;">
+        <table>
+            <thead>
+                <tr><th>Full Name</th><th>Email</th><th>Role</th><th>Department</th><th>Phone</th><th>Status</th><th>Actions</th></tr>
+            </thead>
+            <tbody>
+                <tr th:each="u : ${users}">
+                    <td th:text="${u.fullName}">-</td>
+                    <td th:text="${u.email}">-</td>
+                    <td th:text="${u.role.name()}">-</td>
+                    <td th:text="${u.department != null ? u.department.name : '-'}">-</td>
+                    <td th:text="${u.phone != null ? u.phone : '-'}">-</td>
+                    <td>
+                        <span th:if="${u.enabled}" class="status-badge status-available">Active</span>
+                        <span th:if="${!u.enabled}" class="status-badge" style="background:#ef4444; color:white;">Disabled</span>
+                    </td>
+                    <td>
+                        <a th:href="@{/users/view/{id}(id=${u.id})}" class="btn-action btn-view">View</a>
+                        <a th:href="@{/users/edit/{id}(id=${u.id})}" class="btn-action btn-edit">Edit</a>
+                        <a th:href="@{/users/delete/{id}(id=${u.id})}" class="btn-action btn-delete" onclick="return confirm('Delete this user?')">Delete</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+</body>
+</html>

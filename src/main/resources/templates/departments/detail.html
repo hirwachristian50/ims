@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html th:replace="~{layout/base :: layout('Department Details', ~{::section})}">
+<head></head>
+<body>
+<section>
+    <div style="background:white; padding:20px; border-radius:8px;">
+        <div style="display:flex; justify-content:space-between;"><h2>Department Details</h2><div><a href="/departments">Back to List</a></div></div>
+        <hr>
+        <div><strong>Name:</strong> <span th:text="${department.name}"></span></div>
+        <div><strong>Description:</strong> <span th:text="${department.description != null ? department.description : '-'}"></span></div>
+        <div><strong>Location:</strong> <span th:text="${department.location != null ? department.location : '-'}"></span></div>
+        <div style="margin-top:20px;"><a th:href="@{/departments/edit/{id}(id=${department.id})}" style="background:#3498db; color:white; padding:6px 12px; text-decoration:none; border-radius:4px;">Edit Department</a></div>
+    </div>
+</section>
+</body>
+</html>

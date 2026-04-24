@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html th:replace="~{layout/base :: layout('Asset History', ~{::section})}">
+<head></head>
+<body>
+<section>
+    <div style="background:white; border-radius:8px; padding:20px;"><h2 th:text="'History for ' + ${asset.assetTag}">Asset History</h2><hr>
+        <table style="width:100%;">
+            <thead><tr><th>Assigned To</th><th>Issued By</th><th>Assigned Date</th><th>Returned Date</th><th>Status</th><th>Purpose</th></tr></thead>
+            <tbody>
+                <tr th:each="h : ${history}">
+                    <td th:text="${h.assignedTo.fullName}">-</td>
+                    <td th:text="${h.issuedBy.fullName}">-</td>
+                    <td th:text="${#temporals.format(h.assignedDate, 'dd MMM yyyy HH:mm')}">-</td>
+                    <td th:text="${h.returnedDate != null ? #temporals.format(h.returnedDate, 'dd MMM yyyy HH:mm') : '-'}">-</td>
+                    <td><span th:if="${h.active}" style="background:#e67e22; padding:2px 6px; border-radius:4px;">Active</span><span th:if="${!h.active}" style="background:#2ecc71; padding:2px 6px; border-radius:4px;">Returned</span></td>
+                    <td th:text="${h.purpose}">-</td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(history)}"><td colspan="6">No assignment history for this asset.</td></tr>
+            </tbody>
+        </table>
+        <div style="margin-top:20px;"><a href="/assets">Back to Assets</a></div>
+    </div>
+</section>
+</body>
+</html>

@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      th:fragment="layout(title, content)">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${title}">Airtel Inventory</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --primary: #e74c3c;
+            --primary-dark: #c0392b;
+            --secondary: #2c3e50;
+            --bg-light: #f8fafc;
+            --sidebar-dark: #0f172a;
+            --card-white: #ffffff;
+            --text-dark: #1e293b;
+            --text-muted: #64748b;
+            --border-light: #e2e8f0;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+            --radius-md: 0.5rem;
+            --radius-lg: 0.75rem;
+            --transition: all 0.2s ease;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: var(--bg-light);
+            color: var(--text-dark);
+            line-height: 1.5;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 260px;
+            height: 100%;
+            background: linear-gradient(145deg, var(--sidebar-dark) 0%, #0a0f1c 100%);
+            backdrop-filter: blur(2px);
+            color: #cbd5e1;
+            box-shadow: var(--shadow-lg);
+            z-index: 100;
+            transition: var(--transition);
+        }
+
+        .sidebar .brand {
+            padding: 24px 20px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            margin-bottom: 24px;
+            background: linear-gradient(135deg, #fff, #e2e8f0);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .sidebar .brand::before {
+            content: "📦 ";
+            background: none;
+            -webkit-background-clip: unset;
+            background-clip: unset;
+            color: var(--primary);
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 20px;
+            margin: 6px 12px;
+            border-radius: 40px;
+            color: #a0afc0;
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+        .nav-link:hover {
+            background: rgba(231, 76, 60, 0.15);
+            color: white;
+            transform: translateX(6px);
+        }
+        .nav-link.active {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 4px 12px rgba(231,76,60,0.3);
+        }
+
+        /* Main content */
+        .main-content {
+            margin-left: 260px;
+            padding: 28px 36px;
+        }
+
+        /* Topbar */
+        .topbar {
+            background: var(--card-white);
+            border-radius: 60px;
+            padding: 10px 24px;
+            margin-bottom: 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-light);
+        }
+        .page-title {
+            font-size: 1.6rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--secondary), #1e2a3a);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        .user-email {
+            background: #f1f5f9;
+            padding: 6px 18px;
+            border-radius: 40px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--secondary);
+        }
+        .logout-btn {
+            background: none;
+            border: 1px solid #e2e8f0;
+            color: var(--primary);
+            padding: 6px 16px;
+            border-radius: 40px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+        .logout-btn:hover {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        /* Cards & Stats */
+        .stat-card {
+            background: var(--card-white);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition);
+            border: 1px solid var(--border-light);
+            text-align: center;
+        }
+        .stat-card:hover {
+            transform: translateY(-6px);
+            box-shadow: var(--shadow-md);
+            border-color: var(--primary);
+        }
+        .stat-card h3 {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: var(--primary);
+        }
+        .stat-card p {
+            color: var(--text-muted);
+            font-weight: 500;
+            margin-top: 0.5rem;
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            background: var(--card-white);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+        th {
+            background: #f1f5f9;
+            padding: 14px 16px;
+            font-weight: 600;
+            color: var(--secondary);
+            border-bottom: 1px solid var(--border-light);
+        }
+        td {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border-light);
+            color: var(--text-dark);
+        }
+        tr:hover td {
+            background: #fef9f8;
+        }
+
+        /* Buttons */
+        button, .btn {
+            background: var(--primary);
+            border: none;
+            color: white;
+            padding: 8px 20px;
+            border-radius: 40px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: var(--transition);
+            text-decoration: none;
+            display: inline-block;
+        }
+        button:hover, .btn:hover {
+            background: var(--primary-dark);
+            transform: scale(1.02);
+            box-shadow: var(--shadow-sm);
+        }
+
+        /* Action buttons (View, Edit, Delete, Return) */
+        .btn-action {
+            display: inline-block;
+            padding: 4px 12px;
+            margin: 0 2px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.2s;
+            cursor: pointer;
+            border: none;
+        }
+        .btn-view { background: #3b82f6; color: white; }
+        .btn-view:hover { background: #2563eb; transform: translateY(-1px); }
+        .btn-edit { background: #f59e0b; color: white; }
+        .btn-edit:hover { background: #d97706; transform: translateY(-1px); }
+        .btn-delete { background: #ef4444; color: white; }
+        .btn-delete:hover { background: #dc2626; transform: translateY(-1px); }
+        .btn-return { background: #ef4444; color: white; }
+        .btn-return:hover { background: #dc2626; transform: translateY(-1px); }
+
+        /* Status badges */
+        .status-badge {
+            display: inline-block;
+            padding: 2px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+        .status-available { background: #22c55e; color: white; }
+        .status-assigned { background: #f97316; color: white; }
+        .status-repair { background: #facc15; color: #1e293b; }
+
+        /* Forms */
+        input, select, textarea {
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-md);
+            padding: 10px 14px;
+            font-size: 0.9rem;
+            transition: var(--transition);
+            width: 100%;
+        }
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(231,76,60,0.2);
+        }
+        label {
+            font-weight: 500;
+            margin-bottom: 6px;
+            display: inline-block;
+            color: var(--secondary);
+        }
+
+        /* Layout utilities */
+        .row {
+            display: flex;
+            gap: 24px;
+            flex-wrap: wrap;
+            margin-bottom: 28px;
+        }
+        .col-md-3 {
+            flex: 1;
+            min-width: 200px;
+        }
+        .col-md-6 {
+            flex: 1;
+            min-width: 260px;
+        }
+        .alert {
+            padding: 12px 18px;
+            border-radius: var(--radius-md);
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+        .alert-success {
+            background: #dcfce7;
+            color: #15803d;
+            border-left: 4px solid #22c55e;
+        }
+        .alert-danger {
+            background: #fee2e2;
+            color: #b91c1c;
+            border-left: 4px solid #ef4444;
+        }
+        .text-muted {
+            color: var(--text-muted);
+            font-size: 0.8rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .sidebar { width: 72px; }
+            .sidebar .brand::before { content: "📦"; }
+            .sidebar .brand { font-size: 0; }
+            .nav-link span:last-child { display: none; }
+            .main-content { margin-left: 72px; padding: 20px; }
+            .topbar { flex-direction: column; gap: 12px; align-items: stretch; border-radius: 24px; }
+            .row { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Sidebar -->
+<div class="sidebar">
+    <div class="brand">Airtel Inventory</div>
+    <nav>
+        <a th:href="@{/dashboard}" class="nav-link">📊 Dashboard</a>
+        <a th:href="@{/assets}" class="nav-link">💻 Assets</a>
+        <a th:href="@{/assignments}" class="nav-link">🔄 Assignments</a>
+        <a sec:authorize="hasRole('ADMIN')" th:href="@{/users}" class="nav-link">👥 Users</a>
+        <a sec:authorize="hasRole('ADMIN')" th:href="@{/departments}" class="nav-link">🏢 Departments</a>
+        <a sec:authorize="hasRole('ADMIN')" th:href="@{/reports}" class="nav-link">📈 Reports</a>
+    </nav>
+</div>
+
+<!-- Main Content -->
+<div class="main-content">
+    <div class="topbar">
+        <div class="page-title" th:text="${title}">Page</div>
+        <div class="user-info">
+            <div class="user-email">👤 <span sec:authentication="name">user</span></div>
+            <form th:action="@{/logout}" method="post" style="display:inline;">
+                <button type="submit" class="logout-btn">🚪 Logout</button>
+            </form>
+        </div>
+    </div>
+    <div th:replace="${content}">Content</div>
+</div>
+
+</body>
+</html>

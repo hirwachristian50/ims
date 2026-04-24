@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html th:replace="~{layout/base :: layout(${user.id == null ? 'Add User' : 'Edit User'}, ~{::section})}">
+<head></head>
+<body>
+<section>
+    <div style="background:white; padding:20px; border-radius:8px;">
+        <h2 th:text="${user.id == null ? 'Add New User' : 'Edit User'}">Title</h2>
+        <form th:action="${user.id == null ? '/users/add' : '/users/edit/' + user.id}" th:object="${user}" method="post">
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:15px;">
+                <div>
+                    <label>Full Name *</label>
+                    <input type="text" th:field="*{fullName}" required style="width:100%;">
+                </div>
+                <div>
+                    <label>Username (Reg Number) *</label>
+                    <input type="text" th:field="*{email}" required style="width:100%;">
+                </div>
+                <div th:if="${user.id == null}">
+                    <label>Password *</label>
+                    <input type="password" name="password" required style="width:100%;">
+                </div>
+                <div th:if="${user.id != null}">
+                    <input type="hidden" name="password" th:value="${user.password}">
+                </div>
+                <div>
+                    <label>Phone</label>
+                    <input type="text" th:field="*{phone}" style="width:100%;">
+                </div>
+                <div>
+                    <label>Role *</label>
+                    <select th:field="*{role}" required style="width:100%;">
+                        <option th:each="r : ${roles}" th:value="${r}" th:text="${r.name()}"></option>
+                    </select>
+                </div>
+                <div>
+                    <label>Department</label>
+                    <select th:field="*{department.id}" style="width:100%;">
+                        <option value="">-- None --</option>
+                        <option th:each="d : ${departments}" th:value="${d.id}" th:text="${d.name}"></option>
+                    </select>
+                </div>
+                <div>
+                    <label>Enabled</label>
+                    <select th:field="*{enabled}" style="width:100%;">
+                        <option value="true">Active</option>
+                        <option value="false">Disabled</option>
+                    </select>
+                </div>
+            </div>
+            <div style="margin-top:20px;">
+                <button type="submit">Save User</button>
+                <a href="/users" style="margin-left:10px; background:#95a5a6; padding:6px 12px; text-decoration:none; color:white; border-radius:4px;">Cancel</a>
+            </div>
+        </form>
+    </div>
+</section>
+</body>
+</html>

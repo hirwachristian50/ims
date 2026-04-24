@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html th:replace="~{layout/base :: layout('Assets - Airtel Inventory', ~{::section})}">
+<head></head>
+<body>
+<section>
+    <div style="display: flex; justify-content: space-between; margin-bottom: 20px;">
+        <h2>Asset Management</h2>
+        <a href="/assets/add" class="btn">+ Register Asset</a>
+    </div>
+    <div style="background:white; padding:15px; border-radius:8px; margin-bottom:20px;">
+        <form method="get" action="/assets" style="display: flex; gap: 10px; flex-wrap: wrap;">
+            <input type="text" name="search" placeholder="Search by tag, brand, model" style="flex:2;" th:value="${searchKeyword}">
+            <select name="type" style="padding:6px;">
+                <option value="">All Types</option>
+                <option th:each="t : ${deviceTypes}" th:value="${t}" th:text="${t}" th:selected="${selectedType == t}"></option>
+            </select>
+            <select name="status" style="padding:6px;">
+                <option value="">All Status</option>
+                <option th:each="s : ${assetStatuses}" th:value="${s}" th:text="${s}" th:selected="${selectedStatus == s}"></option>
+            </select>
+            <button type="submit" style="background:#3498db;">Filter</button>
+            <a href="/assets" style="background:#95a5a6; padding:6px 12px; text-decoration:none; color:white; border-radius:4px;">Clear</a>
+        </form>
+    </div>
+    <div style="background:white; border-radius:8px; overflow:auto;">
+        <table>
+            <thead>
+                <tr><th>Asset Tag</th><th>Brand/Model</th><th>Type</th><th>Condition</th><th>Status</th><th>Department</th><th>Actions</th></tr>
+            </thead>
+            <tbody>
+                <tr th:each="a : ${assets}">
+                    <td th:text="${a.assetTag}">-</td>
+                    <td th:text="${a.brand} + ' ' + ${a.model}">-</td>
+                    <td th:text="${a.deviceType}">-</td>
+                    <td><span class="status-badge" style="background:#f39c12;">[[${a.condition}]]</span></td>
+                    <td>
+                        <span th:if="${a.status.name() == 'AVAILABLE'}" class="status-badge status-available">Available</span>
+                        <span th:if="${a.status.name() == 'ASSIGNED'}" class="status-badge status-assigned">Assigned</span>
+                        <span th:if="${a.status.name() == 'UNDER_REPAIR'}" class="status-badge status-repair">Under Repair</span>
+                    </td>
+                    <td th:text="${a.department != null ? a.department.name : '-'}">-</td>
+                    <td>
+                        <a th:href="@{/assets/view/{id}(id=${a.id})}" class="btn-action btn-view">View</a>
+                        <a th:href="@{/assets/edit/{id}(id=${a.id})}" class="btn-action btn-edit">Edit</a>
+                        <a th:href="@{/assets/delete/{id}(id=${a.id})}" class="btn-action btn-delete" onclick="return confirm('Delete this asset?')">Delete</a>
+                    </td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(assets)}">
+                    <td colspan="7" style="text-align:center;">No assets found. <a href="/assets/add">Register one</a>.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+</body>
+</html>

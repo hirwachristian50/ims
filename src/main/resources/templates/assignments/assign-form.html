@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html th:replace="~{layout/base :: layout('Assign Asset', ~{::section})}">
+<head></head>
+<body>
+<section>
+    <div style="background:white; padding:20px; border-radius:8px;"><h2>Assign Asset to User</h2>
+        <form method="post" th:action="@{/assignments/assign}">
+            <div style="margin-bottom:15px;"><label>Select Asset:</label><select name="assetId" required style="width:100%;"><option value="">-- Choose an available asset --</option><option th:each="a : ${assets}" th:value="${a.id}" th:text="${a.assetTag} + ' - ' + ${a.brand} + ' ' + ${a.model}" th:selected="${preSelectedAssetId != null and preSelectedAssetId == a.id}"></option></select></div>
+            <div style="margin-bottom:15px;"><label>Assign To (User):</label><select name="userId" required style="width:100%;"><option value="">-- Select user --</option><option th:each="u : ${users}" th:value="${u.id}" th:text="${u.fullName} + ' (' + ${u.email} + ')'"></option></select></div>
+            <div><label>Purpose / Reason:</label><input type="text" name="purpose" style="width:100%;"></div>
+            <div><label>Notes:</label><textarea name="notes" rows="3" style="width:100%;"></textarea></div>
+            <div style="margin-top:15px;"><button type="submit">Assign Asset</button> <a href="/assignments" style="margin-left:10px; background:#95a5a6; padding:8px 16px; text-decoration:none; color:white; border-radius:4px;">Cancel</a></div>
+        </form>
+    </div>
+</section>
+</body>
+</html>

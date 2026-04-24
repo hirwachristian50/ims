@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html th:replace="~{layout/base :: layout('Asset Details', ~{::section})}">
+<head></head>
+<body>
+<section>
+    <div style="background:white; padding:20px; border-radius:8px;">
+        <div style="display:flex; justify-content:space-between;"><h2>Asset Details</h2><div><a href="/assets">Back to List</a></div></div>
+        <hr>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:15px;">
+            <div><strong>Asset Tag:</strong> <span th:text="${asset.assetTag}"></span></div>
+            <div><strong>Serial Number:</strong> <span th:text="${asset.serialNumber}"></span></div>
+            <div><strong>Brand:</strong> <span th:text="${asset.brand}"></span></div>
+            <div><strong>Model:</strong> <span th:text="${asset.model}"></span></div>
+            <div><strong>Device Type:</strong> <span th:text="${asset.deviceType}"></span></div>
+            <div><strong>Condition:</strong> <span th:text="${asset.condition}"></span></div>
+            <div><strong>Status:</strong> <span th:text="${asset.status}"></span></div>
+            <div><strong>Department:</strong> <span th:text="${asset.department != null ? asset.department.name : '-'}"></span></div>
+            <div><strong>Specifications:</strong> <span th:text="${asset.specifications != null ? asset.specifications : '-'}"></span></div>
+            <div><strong>Purchase Date:</strong> <span th:text="${asset.purchaseDate}"></span></div>
+            <div><strong>Warranty Expiry:</strong> <span th:text="${asset.warrantyExpiry}"></span></div>
+            <div><strong>Registered:</strong> <span th:text="${asset.dateRegistered}"></span></div>
+            <div><strong>Notes:</strong> <span th:text="${asset.notes != null ? asset.notes : '-'}"></span></div>
+        </div>
+        <div style="margin-top:20px;">
+            <a th:href="@{/assignments/history/asset/{id}(id=${asset.id})}" style="background:#3498db; color:white; padding:6px 12px; text-decoration:none; border-radius:4px;">View Assignment History</a>
+            <a th:if="${asset.status.name() == 'AVAILABLE'}" th:href="@{/assignments/assign(assetId=${asset.id})}" style="background:#e74c3c; margin-left:10px; color:white; padding:6px 12px; text-decoration:none; border-radius:4px;">Assign This Asset</a>
+        </div>
+    </div>
+</section>
+</body>
+</html>

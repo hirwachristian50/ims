@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html th:replace="~{layout/base :: layout(${department.id == null ? 'Add Department' : 'Edit Department'}, ~{::section})}">
+<head></head>
+<body>
+<section>
+    <div style="background:white; padding:20px; border-radius:8px;">
+        <h2 th:text="${department.id == null ? 'Add New Department' : 'Edit Department'}">Title</h2>
+        <form th:action="${department.id == null ? '/departments/add' : '/departments/edit/' + department.id}" th:object="${department}" method="post">
+            <div><label>Department Name *</label><input type="text" th:field="*{name}" required style="width:100%;"></div>
+            <div><label>Description</label><textarea th:field="*{description}" rows="3" style="width:100%;"></textarea></div>
+            <div><label>Location</label><input type="text" th:field="*{location}" style="width:100%;"></div>
+            <div style="margin-top:20px;"><button type="submit">Save Department</button> <a href="/departments" style="margin-left:10px; background:#95a5a6; padding:6px 12px; text-decoration:none; color:white; border-radius:4px;">Cancel</a></div>
+        </form>
+    </div>
+</section>
+</body>
+</html>

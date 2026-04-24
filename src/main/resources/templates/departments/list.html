@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html th:replace="~{layout/base :: layout('Departments - Airtel Inventory', ~{::section})}">
+<head></head>
+<body>
+<section>
+    <div style="display: flex; justify-content: space-between; margin-bottom: 20px;">
+        <h2>Department Management</h2>
+        <a href="/departments/add" class="btn">+ Add Department</a>
+    </div>
+    <div style="background:white; border-radius:8px; overflow:auto;">
+        <table>
+            <thead>
+                <tr><th>Name</th><th>Description</th><th>Location</th><th>Actions</th></tr>
+            </thead>
+            <tbody>
+                <tr th:each="d : ${departments}">
+                    <td th:text="${d.name}">-</td>
+                    <td th:text="${d.description != null ? d.description : '-'}">-</td>
+                    <td th:text="${d.location != null ? d.location : '-'}">-</td>
+                    <td>
+                        <a th:href="@{/departments/view/{id}(id=${d.id})}" class="btn-action btn-view">View</a>
+                        <a th:href="@{/departments/edit/{id}(id=${d.id})}" class="btn-action btn-edit">Edit</a>
+                        <a th:href="@{/departments/delete/{id}(id=${d.id})}" class="btn-action btn-delete" onclick="return confirm('Delete this department?')">Delete</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+</body>
+</html>

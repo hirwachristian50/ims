@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html th:replace="~{layout/base :: layout('Dashboard', ~{::section})}">
+<head></head>
+<body>
+<section>
+    <!-- Welcome Row (optional) -->
+    <div style="margin-bottom: 28px;">
+        <h1 style="font-size: 1.8rem; font-weight: 700; color: #1e293b;">Welcome back, <span sec:authentication="name">Admin</span> 👋</h1>
+        <p style="color: #64748b; margin-top: 4px;">Here's what's happening with your inventory today.</p>
+    </div>
+
+    <!-- Stats Cards Row -->
+    <div class="row">
+        <div class="col-md-3">
+            <div class="stat-card">
+                <div style="font-size: 2.5rem;">📦</div>
+                <h3 th:text="${totalAssets}">0</h3>
+                <p>Total Assets</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card">
+                <div style="font-size: 2.5rem;">✅</div>
+                <h3 th:text="${availableAssets}">0</h3>
+                <p>Available</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card">
+                <div style="font-size: 2.5rem;">🔗</div>
+                <h3 th:text="${assignedAssets}">0</h3>
+                <p>Assigned</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card">
+                <div style="font-size: 2.5rem;">🛠️</div>
+                <h3 th:text="${underRepairAssets}">0</h3>
+                <p>Under Repair</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts / Activity Row -->
+    <div class="row" style="align-items: stretch;">
+        <!-- Recent Activity Card -->
+        <div class="col-md-6">
+            <div class="stat-card" style="text-align: left; padding: 1.2rem;">
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 16px; border-bottom: 2px solid #e2e8f0; padding-bottom: 12px;">
+                    <span style="font-size: 1.5rem;">⏱️</span>
+                    <h4 style="font-weight: 600; margin: 0;">Recent Activity</h4>
+                </div>
+                <div style="max-height: 320px; overflow-y: auto;">
+                    <ul style="list-style: none; padding: 0; margin: 0;">
+                        <li th:each="log : ${recentLogs}" style="border-bottom: 1px solid #edf2f7; padding: 12px 0;">
+                            <div style="display: flex; align-items: flex-start; gap: 12px;">
+                                <span style="font-size: 1.2rem;">📌</span>
+                                <div style="flex: 1;">
+                                    <strong th:text="${log.action}" style="color: #e74c3c;"></strong>
+                                    <span th:text="' – ' + ${log.details}" style="color: #334155;"></span>
+                                    <div class="text-muted" style="margin-top: 4px;" th:text="${log.performedBy} + ' · ' + ${#temporals.format(log.timestamp, 'dd MMM yyyy HH:mm')}"></div>
+                                </div>
+                            </div>
+                        </li>
+                        <li th:if="${#lists.isEmpty(recentLogs)}" style="padding: 20px; text-align: center; color: #64748b;">No recent activity.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Currently Assigned Card -->
+        <div class="col-md-6">
+            <div class="stat-card" style="text-align: left; padding: 1.2rem;">
+                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 16px; border-bottom: 2px solid #e2e8f0; padding-bottom: 12px;">
+                    <span style="font-size: 1.5rem;">📋</span>
+                    <h4 style="font-weight: 600; margin: 0;">Currently Assigned</h4>
+                </div>
+                <div style="max-height: 320px; overflow-y: auto;">
+                    <table style="width: 100%; background: transparent; box-shadow: none;">
+                        <thead>
+                            <tr style="background: #f8fafc;">
+                                <th style="padding: 8px 0;">Asset Tag</th>
+                                <th style="padding: 8px 0;">Assigned To</th>
+                                <th style="padding: 8px 0;">Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="a : ${activeAssignments}" style="border-bottom: 1px solid #edf2f7;">
+                                <td style="padding: 10px 0;" th:text="${a.asset.assetTag}">-</td>
+                                <td style="padding: 10px 0;" th:text="${a.assignedTo.fullName}">-</td>
+                                <td style="padding: 10px 0;" th:text="${#temporals.format(a.assignedDate, 'dd MMM yyyy')}">-</td>
+                            </tr>
+                            <tr th:if="${#lists.isEmpty(activeAssignments)}">
+                                <td colspan="3" style="padding: 20px; text-align: center; color: #64748b;">No active assignments.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Optional: Quick Links Section (can be removed if not needed) -->
+    <div class="row" style="margin-top: 12px;">
+        <div class="col-md-12">
+            <div class="stat-card" style="text-align: center; background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%); color: white;">
+                <h4 style="margin-bottom: 12px;">Quick Actions</h4>
+                <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;">
+                    <a href="/assets/add" class="btn" style="background: white; color: #e74c3c; font-weight: 700;">➕ Register Asset</a>
+                    <a href="/assignments/assign" class="btn" style="background: white; color: #e74c3c; font-weight: 700;">🔄 New Assignment</a>
+                    <a href="/users/add" class="btn" style="background: white; color: #e74c3c; font-weight: 700;">👥 Add User</a>
+                    <a href="/reports" class="btn" style="background: white; color: #e74c3c; font-weight: 700;">📊 View Reports</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Login - Airtel Inventory</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', system-ui, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; justify-content: center; align-items: center; height: 100vh; }
+        .login-container { background: white; width: 380px; padding: 40px 35px; border-radius: 16px; box-shadow: 0 20px 35px rgba(0,0,0,0.2); }
+        .login-header { text-align: center; margin-bottom: 30px; }
+        .login-header h2 { color: #e74c3c; font-size: 1.8rem; }
+        .login-header p { color: #7f8c8d; font-size: 0.85rem; }
+        .form-group { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 6px; font-weight: 600; color: #2c3e50; }
+        input { width: 100%; padding: 10px 14px; border: 1px solid #ddd; border-radius: 8px; font-size: 0.95rem; }
+        input:focus { outline: none; border-color: #e74c3c; box-shadow: 0 0 0 3px rgba(231,76,60,0.1); }
+        button { width: 100%; background: #e74c3c; color: white; border: none; padding: 12px; border-radius: 40px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: background 0.2s; }
+        button:hover { background: #c0392b; }
+        .alert { padding: 10px; border-radius: 8px; margin-bottom: 20px; text-align: center; font-size: 0.85rem; }
+        .alert-danger { background: #fee2e2; color: #c0392b; border-left: 3px solid #e74c3c; }
+        .alert-success { background: #d4edda; color: #155724; border-left: 3px solid #2ecc71; }
+        .footer { text-align: center; margin-top: 20px; font-size: 0.7rem; color: #95a5a6; }
+    </style>
+</head>
+<body>
+<div class="login-container">
+    <div class="login-header">
+        <h2>Airtel Inventory</h2>
+        <p>End‑User Equipment Management System</p>
+    </div>
+    <form method="post" th:action="@{/login}">
+        <div class="form-group">
+            <label>Username (Reg Number)</label>
+            <input type="text" name="email" required autofocus placeholder="24RP00849">
+        </div>
+        <div class="form-group">
+            <label>Password</label>
+            <input type="password" name="password" required placeholder="••••••">
+        </div>
+        <div th:if="${param.error}" class="alert alert-danger">❌ Invalid username or password.</div>
+        <div th:if="${param.logout}" class="alert alert-success">✅ Logged out successfully.</div>
+        <button type="submit">Sign In</button>
+    </form>
+    <div class="footer">Airtel Rwanda © 2026 – Internal Use Only</div>
+</div>
+</body>
+</html>

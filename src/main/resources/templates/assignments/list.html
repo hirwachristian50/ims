@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html th:replace="~{layout/base :: layout('Assignments', ~{::section})}">
+<head></head>
+<body>
+<section>
+    <div style="display: flex; justify-content: space-between; margin-bottom: 20px;">
+        <h2>Current Assignments</h2>
+        <a href="/assignments/assign" class="btn">+ New Assignment</a>
+    </div>
+    <div style="background:white; border-radius:8px; overflow:auto;">
+        <table>
+            <thead>
+                <tr><th>Asset Tag</th><th>Asset Model</th><th>Assigned To</th><th>Purpose</th><th>Assigned Date</th><th>Actions</th></tr>
+            </thead>
+            <tbody>
+                <tr th:each="a : ${activeAssignments}">
+                    <td th:text="${a.asset.assetTag}">-</td>
+                    <td th:text="${a.asset.brand} + ' ' + ${a.asset.model}">-</td>
+                    <td th:text="${a.assignedTo.fullName}">-</td>
+                    <td th:text="${a.purpose}">-</td>
+                    <td th:text="${#temporals.format(a.assignedDate, 'dd MMM yyyy HH:mm')}">-</td>
+                    <td><a th:href="@{/assignments/return/{id}(id=${a.id})}" class="btn-action btn-return" onclick="return confirm('Return this asset?')">Return</a></td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(activeAssignments)}">
+                    <td colspan="6" style="text-align:center;">No active assignments. <a href="/assignments/assign">Assign an asset</a>.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+</body>
+</html>

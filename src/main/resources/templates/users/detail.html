@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html th:replace="~{layout/base :: layout('User Details', ~{::section})}">
+<head></head>
+<body>
+<section>
+    <div style="background:white; padding:20px; border-radius:8px;">
+        <div style="display:flex; justify-content:space-between;"><h2>User Details</h2><div><a href="/users">Back to List</a></div></div>
+        <hr>
+        <div><strong>Full Name:</strong> <span th:text="${user.fullName}"></span></div>
+        <div><strong>Email:</strong> <span th:text="${user.email}"></span></div>
+        <div><strong>Phone:</strong> <span th:text="${user.phone != null ? u.phone : '-'}"></span></div>
+        <div><strong>Role:</strong> <span th:text="${user.role.name()}"></span></div>
+        <div><strong>Department:</strong> <span th:text="${user.department != null ? user.department.name : '-'}"></span></div>
+        <div><strong>Status:</strong> <span th:if="${user.enabled}">Active</span><span th:if="${!user.enabled}">Disabled</span></div>
+        <div style="margin-top:20px;"><a th:href="@{/users/edit/{id}(id=${user.id})}" style="background:#3498db; color:white; padding:6px 12px; text-decoration:none; border-radius:4px;">Edit User</a></div>
+    </div>
+</section>
+</body>
+</html>
