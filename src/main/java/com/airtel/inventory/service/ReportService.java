@@ -7,10 +7,7 @@ import com.airtel.inventory.repository.AuditLogRepository;
 import com.airtel.inventory.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class ReportService {
@@ -28,19 +25,11 @@ public class ReportService {
     private UserRepository userRepository;
 
     public List<AuditLog> getAllAuditLogs() {
-        return auditLogRepository.findAllByOrderByTimestampDesc();
-    }
-
-    public List<AuditLog> getAuditLogsByDateRange(LocalDateTime start, LocalDateTime end) {
-        return auditLogRepository.findByTimestampBetweenOrderByTimestampDesc(start, end);
-    }
-
-    public List<AuditLog> getAuditLogsByAction(String action) {
-        return auditLogRepository.findByActionOrderByTimestampDesc(action);
-    }
-
-    public List<AuditLog> getAuditLogsByUser(String email) {
-        return auditLogRepository.findByPerformedByOrderByTimestampDesc(email);
+        try {
+            return auditLogRepository.findAllByOrderByTimestampDesc();
+        } catch (Exception e) {
+            return new ArrayList<>();
+        }
     }
 
     public Map<String, Object> getAssetSummary() {
@@ -57,9 +46,10 @@ public class ReportService {
     }
 
     public List<Object[]> getAssignmentsPerUser() {
-        // Returns list of Object[3] -> [user_full_name, assignment_count]
-        return assignmentRepository.countAssignmentsPerUser();
+        try {
+            return assignmentRepository.countAssignmentsPerUser();
+        } catch (Exception e) {
+            return new ArrayList<>();
+        }
     }
-
-    // We need to add a custom query to AssignmentRepository – see below
 }
