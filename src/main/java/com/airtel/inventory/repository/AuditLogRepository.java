@@ -24,6 +24,6 @@ public interface AuditLogRepository extends JpaRepository<AuditLog, Long> {
     // Filter by user (reports)
     List<AuditLog> findByPerformedByOrderByTimestampDesc(String email);
 
-    // All logs for a specific record (e.g. asset history, optionally used)
+    // All logs for a specific record (asset history)
     List<AuditLog> findByEntityTypeAndEntityIdOrderByTimestampDesc(String entityType, Long entityId);
 }
