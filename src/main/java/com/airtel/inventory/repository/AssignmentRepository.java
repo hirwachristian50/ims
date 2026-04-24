@@ -30,7 +30,7 @@ public interface AssignmentRepository extends JpaRepository<Assignment, Long> {
     // Count active assignments
     long countByActiveTrue();
 
-    // Count assignments per user (for reports)
+    // Count assignments per user (for reports) – REQUIRED
     @Query("SELECT a.assignedTo.fullName, COUNT(a) FROM Assignment a GROUP BY a.assignedTo.id")
     List<Object[]> countAssignmentsPerUser();
 }
